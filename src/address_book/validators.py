@@ -1,6 +1,6 @@
 from functools import wraps
 
-from classes import AddressBook, Record
+from .classes import AddressBook, Record
 
 def change_contact_validator(func):
     @wraps(func)

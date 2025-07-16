@@ -1,7 +1,8 @@
-from classes import AddressBook
-import handlers
-import storage
-import validators
+import src.address_book.handlers as handlers
+import src.storage as storage
+import src.address_book.validators as validators
+from src.address_book.classes import AddressBook
+
 
 @validators.parse_input_validator
 def parse_input(user_input):
@@ -24,7 +25,7 @@ commands = {
 }
 
 def main():
-    book = storage.load_data()
+    book = storage.load_data(default=AddressBook())
     print("Welcome to the assistant bot!")
     print(handlers.help())
 

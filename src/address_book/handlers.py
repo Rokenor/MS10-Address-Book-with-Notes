@@ -1,6 +1,6 @@
 import sys
-from classes import AddressBook, Record
-import validators
+from . import validators
+from .classes import AddressBook, Record
 
 def close(args = None, book = None):
     print("Good bye!")
