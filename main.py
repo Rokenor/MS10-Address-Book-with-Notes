@@ -6,6 +6,7 @@ from src.address_book.classes import AddressBook
 
 @validators.parse_input_validator
 def parse_input(user_input):
+    """Parses user input into a command and arguments."""
     cmd, *args = user_input.split()
     cmd = cmd.strip().lower()
     return cmd, *args
@@ -14,20 +15,23 @@ commands = {
     "close": handlers.close,
     "exit": handlers.close,
     "hello": lambda args, book: "How can I help you?",
-    "help": handlers.help,
+    "help": handlers.command_list,
     "add": handlers.add_contact,
-    "change": handlers.change_contact,
-    "phone": handlers.find_contact,
-    "all": handlers.list_contacts,
+    "add-address": handlers.add_address,
     "add-birthday": handlers.add_birthday,
+    "add-email": handlers.add_email,
+    "all": handlers.list_contacts,
+    "search": handlers.find_contact,
+    "change": handlers.change_contact,
     "show-birthday": handlers.show_birthday,
     "birthdays": handlers.birthdays
 }
 
 def main():
+    """Main function."""
     book = storage.load_data(default=AddressBook())
     print("Welcome to the assistant bot!")
-    print(handlers.help())
+    print(handlers.command_list())
 
     try:
         while True:
