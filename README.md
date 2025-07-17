@@ -1,16 +1,33 @@
 # MS10-Address-Book-with-Notes
 
-A command-line address book application with birthday tracking and contact management features.
+A comprehensive command-line contact management system with integrated notes functionality. This application helps you organize your contacts, track important dates, and manage notes efficiently.
 
 ## Features
 
-- Add, edit, and delete contacts
-- Store phone numbers with validation
-- Birthday tracking and reminders
-- Persistent data storage using pickle
-- Input validation and error handling
-- Command-line interface
-- Notes taking features
+- Comprehensive contact management:
+  - Add, edit, and delete contacts
+  - Store multiple phone numbers with validation
+  - Manage email addresses
+  - Track physical addresses
+  - Birthday tracking and reminders
+
+- Advanced notes system:
+  - Create and manage notes
+  - Add tags for organization
+  - Search notes by content or tags
+  - Sort notes by tags
+  - Edit and delete notes
+
+- Persistent data storage:
+  - Automatic data persistence using pickle
+  - Separate storage for contacts and notes
+  - Data backup and recovery
+
+- User-friendly interface:
+  - Command-based interaction
+  - Input validation and error handling
+  - Help system with command descriptions
+  - Interactive prompts for better user experience
 
 ## Python Version Requirements
 
@@ -55,17 +72,25 @@ python main.py
 ### Example Usage
 
 ```
+# Contact Management
 Enter a command: add John 1234567890
 Contact added.
 
 Enter a command: add-birthday John 15.03.1990
 Birthday added.
 
-Enter a command: phone John
-Contact name: John, phones: 1234567890
+Enter a command: add-email John john@example.com
+Email added.
 
-Enter a command: all
-Contact name: John, phones: 1234567890
+# Notes Management
+Enter a command: note add "Important meeting" -t "work meeting"
+Note created.
+
+Enter a command: note search "meeting"
+Found notes: Important meeting
+
+Enter a command: note tag-sort
+Notes sorted by tags
 ```
 
 ## Troubleshooting
@@ -92,7 +117,12 @@ pip install -r requirements.txt
 
 ## Data Storage
 
-The application stores data in `storage/addressbook.pkl`. This file is automatically created when you first add a contact.
+The application uses two separate storage files:
+
+- `storage/addressbook.pkl`: Stores contact information
+- `storage/notes.pkl`: Stores notes and tags
+
+These files are automatically created when you first add a contact or note.
 
 ## Contributing
 
