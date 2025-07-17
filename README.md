@@ -83,13 +83,13 @@ Enter a command: add-email John john@example.com
 Email added.
 
 # Notes Management
-Enter a command: note add "Important meeting" -t "work meeting"
+Enter a command: note "Important meeting""work meeting"
 Note created.
 
-Enter a command: note search "meeting"
+Enter a command: note-search "meeting"
 Found notes: Important meeting
 
-Enter a command: note tag-sort
+Enter a command: note-tag-sort
 Notes sorted by tags
 ```
 
