@@ -16,12 +16,15 @@ def command_list(args = None, book = None):
         "- add-address <name> <address>: Add an address to a contact\n"
         "- add-birthday <name> <birthday>: Add a birthday to a contact\n"
         "- add-email <name> <email>: Add an email address to a contact\n"
+        "- birthdays <days>: List upcoming birthdays in the next <days> days\n"
         "- all: List all contacts\n"
         "- search <name>: Find a contact by name\n"
-        "- birthdays <days>: List upcoming birthdays in the next <days> days\n"
-        "- change <name> <new_phone>: Change an existing contact's phone\n"
+        "- delete <name>: Delete a contact\n"
+        "- edit-address <name> <new_address>: Edit a contact's address\n"
+        "- edit-phone <name> <old_phone> <new_phone>: Edit a contact's phone\n"
+        "- edit-email <name> <new_email>: Edit a contact's email\n"
+        "- edit-birthday <name> <new_birthday>: Edit a contact's birthday\n"
         "- show-birthday <name>: Show a contact's birthday\n"
-        "- birthdays: List upcoming birthdays\n"
         "- note <name> <text>: Add a new note\n"
         "- note-edit <name> <new_text>: Edit a note's text\n"
         "- note-search <text>: Search notes by content\n"
@@ -47,6 +50,7 @@ def add_contact(args, book: AddressBook):
         record.add_phone(phone)
     return message
 
+@validators.add_address_validator
 def add_address(args, book: AddressBook):
     """Adds an address to a contact in the address book."""
     name = args[0]
@@ -69,15 +73,38 @@ def find_contact(args, book: AddressBook):
     rec = book.find(name)
     return f"{rec}" if rec else "Contact not found."
 
-@validators.change_contact_validator
-def change_contact(args, book: AddressBook):
+@validators.delete_contact_validator
+def delete_contact(args, book: AddressBook):
+    """Deletes a contact from the address book."""
+    name = args[0]
+    rec = book.find(name)
+    if rec is None:
+        return "Contact not found."
+    book.delete(rec.name.value)
+    return "Contact deleted."
+
+@validators.edit_address_validator
+def edit_address(args, book: AddressBook):
+    """Edits a contact's address in the address book."""
+    name = args[0]
+    new_address = " ".join(args[1:])
+    rec = book.find(name)
+    if rec is None:
+        return "Contact not found."
+
+    rec.edit_address(new_address)
+    return "Address updated."
+
+@validators.edit_phone_validator
+def edit_phone(args, book: AddressBook):
+    """Edits a contact's phone number in the address book."""
     name, old_phone, new_phone = args
     rec = book.find(name)
     if rec is None:
         return "Contact not found."
-    
+
     rec.edit_phone(old_phone, new_phone)
-    return "Contact updated."
+    return "Phone updated."
 
 @validators.add_birthday_validator
 def add_birthday(args, book: AddressBook):
@@ -86,17 +113,20 @@ def add_birthday(args, book: AddressBook):
     record = book.find(name)
     if not record:
         return "Contact not found."
-    
+
     record.add_birthday(birthday)
     return "Birthday added."
 
-@validators.show_birthday_validator
-def show_birthday(args, book: AddressBook):
-    name = args[0]
-    record = book.find(name)
-    if not record:
+@validators.add_birthday_validator
+def edit_birthday(args, book: AddressBook):
+    """Edits a contact's birthday in the address book."""
+    name, new_birthday = args
+    rec = book.find(name)
+    if rec is None:
         return "Contact not found."
-    return f"{name}'s birthday is {record.birthday}."
+
+    rec.add_birthday(new_birthday)
+    return "Birthday updated."
 
 @validators.birthdays_validator
 def birthdays(args, book: AddressBook):
@@ -107,6 +137,7 @@ def birthdays(args, book: AddressBook):
         return "No upcoming birthdays."
     return "\n".join(f"{record.name}: {record.birthday}" for record in birthdays_list)
 
+@validators.add_email_validator
 def add_email(args, book: AddressBook):
     """Adds an email address to a contact in the address book."""
     name, email = args
@@ -115,3 +146,14 @@ def add_email(args, book: AddressBook):
         return "Contact not found."
     record.add_email(email)
     return "Email added."
+
+@validators.edit_email_validator
+def edit_email(args, book: AddressBook):
+    """Edits a contact's email address in the address book."""
+    name, new_email = args
+    rec = book.find(name)
+    if rec is None:
+        return "Contact not found."
+
+    rec.add_email(new_email)
+    return "Email updated."

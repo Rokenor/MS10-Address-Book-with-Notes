@@ -11,7 +11,6 @@ class Field:
 
 class Name(Field):
     """Represents a person's name in the address book."""
-    pass
 
 class Address(Field):
     """Represents an address in the address book."""
@@ -24,7 +23,7 @@ class Phone(Field):
     """Represents a phone number in the address book."""
     def __init__(self, value: str):
         if len(value) != 10 or not value.isdigit():
-            raise ValueError("Phone number must be 10 digits long and contain only digits. Got: " + value)
+            raise ValueError(f"Phone must be 10 digits long and contain only digits. Got: {value}")
         super().__init__(value)
 
 class Email(Field):
@@ -41,8 +40,8 @@ class Birthday(Field):
             if not isinstance(value, str):
                 raise ValueError("Birthday must be a string in the format DD.MM.YYYY")
             self.value = datetime.strptime(value, "%d.%m.%Y").date()
-        except ValueError:
-            raise ValueError("Invalid date format. Use DD.MM.YYYY")
+        except ValueError as e:
+            raise ValueError("Invalid date format. Use DD.MM.YYYY") from e
         super().__init__(value)
 
 class Record:
@@ -62,7 +61,7 @@ class Record:
         self.birthday: Birthday | None = None
         self.phones = []
         self.email = Email | None
-    
+
     def add_address(self, address: str):
         """Adds an address to the record."""
         self.address = Address(address)
@@ -85,13 +84,20 @@ class Record:
         """Adds a phone number to the record."""
         self.phones.append(Phone(phone))
 
+    def edit_address(self, new_address: str):
+        """Edits the address of the record."""
+        if self.address is None:
+            self.address = Address(new_address)
+        else:
+            self.address.value = new_address
+
     def edit_phone(self, old_phone: str, new_phone: str):
         """Edits a phone number in the record."""
         for i, p in enumerate(self.phones):
             if p.value == old_phone:
                 self.phones[i] = Phone(new_phone)
                 break
-    
+
     def find_phone(self, phone: str) -> Phone | None:
         """Finds a phone number in the record."""
         for p in self.phones:
@@ -110,7 +116,14 @@ class Record:
     def show_email(self) -> str:
         """Returns the email of the record."""
         return getattr(self.email, 'value', "Not set")
-    
+
+    def edit_email(self, new_email: str):
+        """Edits the email address of the record."""
+        if self.email is None:
+            self.email = Email(new_email)
+        else:
+            self.email.value = new_email
+
     def __str__(self):
         return (
             f"Name: {self.name.value}, "
@@ -145,7 +158,11 @@ class AddressBook(UserDict):
         if name in self.data:
             del self.data[name]
 
-    def get_upcoming_birthdays(self, upcoming_days: int = 7, today: datetime = datetime.now()) -> list[Record]:
+    def get_upcoming_birthdays(
+            self,
+            upcoming_days: int = 7,
+            today: datetime = datetime.now()
+        ) -> list[Record]:
         """Returns a list of records with upcoming birthdays by the given number of days."""
         if not isinstance(today, datetime):
             raise ValueError("Today must be a datetime object got: " + type(today))
