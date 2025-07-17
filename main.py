@@ -3,6 +3,22 @@ import src.storage as storage
 import src.address_book.validators as validators
 from src.address_book.classes import AddressBook
 
+from src.notes.handlers import (
+    note_book,
+    note_add_command,
+    note_edit_command,
+    note_search_command,
+    note_tag_command,
+    note_tag_search_command,
+    note_tag_sort_command,
+    note_delete_command,
+    note_all_command 
+)
+from src.storage import load_notes
+
+loaded_notes = load_notes(default=note_book)
+if loaded_notes:
+    note_book.data = loaded_notes.data
 
 @validators.parse_input_validator
 def parse_input(user_input):
@@ -24,7 +40,15 @@ commands = {
     "search": handlers.find_contact,
     "change": handlers.change_contact,
     "show-birthday": handlers.show_birthday,
-    "birthdays": handlers.birthdays
+    "birthdays": handlers.birthdays,
+    "note": note_add_command,
+    "note-edit": note_edit_command,
+    "note-search": note_search_command,
+    "note-tag": note_tag_command,
+    "note-tag-search": note_tag_search_command,
+    "note-tag-sort": note_tag_sort_command,
+    "note-all": note_all_command,
+    "note-delete": note_delete_command
 }
 
 def main():
