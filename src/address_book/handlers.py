@@ -21,6 +21,15 @@ def command_list(args = None, book = None):
         "- birthdays <days>: List upcoming birthdays in the next <days> days\n"
         "- change <name> <new_phone>: Change an existing contact's phone\n"
         "- show-birthday <name>: Show a contact's birthday\n"
+        "- birthdays: List upcoming birthdays\n"
+        "- note <name> <text>: Add a new note\n"
+        "- note-edit <name> <new_text>: Edit a note's text\n"
+        "- note-search <text>: Search notes by content\n"
+        "- note-tag <name> <tag>: Add a tag to a note\n"
+        "- note-tag-search <tag>: Find notes with a specific tag\n"
+        "- note-tag-sort <tag>: Sort notes by a tag\n"
+        "- note-delete <name>: Delete a note\n"
+        "- note-all: List all notes\n"
         "- close or exit: Exit the program\n"
     )
 
