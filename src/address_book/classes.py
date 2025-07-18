@@ -1,5 +1,7 @@
 from collections import UserDict
 from datetime import datetime, timedelta
+from colorama import Fore, init
+init(autoreset=True)
 
 class Field:
     """Base class for fields in the address book."""
@@ -16,21 +18,21 @@ class Address(Field):
     """Represents an address in the address book."""
     def __init__(self, value: str):
         if not isinstance(value, str):
-            raise ValueError("Address must be a string")
+            raise ValueError(Fore.RED + "Address must be a string")
         super().__init__(value)
 
 class Phone(Field):
     """Represents a phone number in the address book."""
     def __init__(self, value: str):
         if len(value) != 10 or not value.isdigit():
-            raise ValueError(f"Phone must be 10 digits long and contain only digits. Got: {value}")
+            raise ValueError(Fore.RED + "Phone must be 10 digits long and contain only digits. Got: " + value)
         super().__init__(value)
 
 class Email(Field):
     """Represents an email address in the address book."""
     def __init__(self, value):
         if "@" not in value:
-            raise ValueError("Email must contain an '@' symbol. Got: " + value)
+            raise ValueError(Fore.RED + "Email must contain an '@' symbol. Got: " + value)
         super().__init__(value)
 
 class Birthday(Field):
@@ -38,10 +40,10 @@ class Birthday(Field):
     def __init__(self, value: str):
         try:
             if not isinstance(value, str):
-                raise ValueError("Birthday must be a string in the format DD.MM.YYYY")
+                raise ValueError(Fore.RED + "Birthday must be a string in the format DD.MM.YYYY")
             self.value = datetime.strptime(value, "%d.%m.%Y").date()
         except ValueError as e:
-            raise ValueError("Invalid date format. Use DD.MM.YYYY") from e
+            raise ValueError(Fore.RED + "Invalid date format. Use DD.MM.YYYY") from e
         super().__init__(value)
 
 class Record:
@@ -68,7 +70,7 @@ class Record:
 
     def show_address(self) -> str:
         """Returns the address of the record."""
-        return getattr(self.address, 'value', "Not set")
+        return getattr(self.address, 'value', Fore.RED + "Not set")
 
     def add_birthday(self, birthday: str):
         """Adds a birthday to the record."""
@@ -78,7 +80,7 @@ class Record:
         """Returns the birthday of the record."""
         if self.birthday:
             return self.birthday.value
-        return "Not set"
+        return Fore.RED + "Not set"
 
     def add_phone(self, phone: str):
         """Adds a phone number to the record."""
@@ -115,7 +117,7 @@ class Record:
 
     def show_email(self) -> str:
         """Returns the email of the record."""
-        return getattr(self.email, 'value', "Not set")
+        return getattr(self.email, 'value', Fore.RED + "Not set")
 
     def edit_email(self, new_email: str):
         """Edits the email address of the record."""
@@ -165,9 +167,9 @@ class AddressBook(UserDict):
         ) -> list[Record]:
         """Returns a list of records with upcoming birthdays by the given number of days."""
         if not isinstance(today, datetime):
-            raise ValueError("Today must be a datetime object got: " + type(today))
+            raise ValueError(Fore.RED + "Today must be a datetime object got: " + type(today))
         if not isinstance(upcoming_days, int) or upcoming_days < 0:
-            raise ValueError("Upcoming days must be a non-negative integer. Got: " + str(upcoming_days))
+            raise ValueError(Fore.RED + "Upcoming days must be a non-negative integer. Got: " + str(upcoming_days))
         if len(self.data) == 0:
             return []
 
