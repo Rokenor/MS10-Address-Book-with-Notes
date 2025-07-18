@@ -6,17 +6,25 @@ A comprehensive command-line contact management system with integrated notes fun
 
 - Comprehensive contact management:
   - Add, edit, and delete contacts
-  - Store multiple phone numbers with validation
-  - Manage email addresses
-  - Track physical addresses
+  - Store multiple phone numbers (displayed as comma-separated strings)
+  - Manage email addresses with validation
+  - Track physical addresses with improved display
   - Birthday tracking and reminders
 
 - Advanced notes system:
-  - Create and manage notes
+  - Create and manage notes with dividers for better readability
   - Add tags for organization
   - Search notes by content or tags
   - Sort notes by tags
   - Edit and delete notes
+
+- Enhanced UI:
+  - Colorized output for better visibility
+    - Green text for success messages
+    - Red text for errors and warnings
+  - Themed tables with improved formatting
+  - Clear dividers between notes for better organization
+  - Better formatting for phone numbers and addresses
 
 - Persistent data storage:
   - Automatic data persistence using pickle
@@ -24,8 +32,8 @@ A comprehensive command-line contact management system with integrated notes fun
   - Data backup and recovery
 
 - User-friendly interface:
-  - Command-based interaction
-  - Input validation and error handling
+  - Command-based interaction with color-coded prompts
+  - Input validation with colored error messages
   - Help system with command descriptions
   - Interactive prompts for better user experience
 
@@ -87,7 +95,7 @@ Enter a command: note Important work meeting
 Note created.
 
 Enter a command: note-search meeting
-Found notes: Important meeting
+Found notes: work meeting
 
 Enter a command: note-tag-sort
 Notes sorted by tags

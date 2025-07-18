@@ -14,7 +14,7 @@ class Note:
         self.text = new_text
 
     def __str__(self):
-        return f"Назва: {self.name}\nТекст: {self.text}\nТеги: {', '.join(self.tags)}"
+        return f"Name: {self.name}\nText: {self.text}\nTags: {', '.join(self.tags)}"
 
 class NoteBook(UserDict):
     def add_note(self, note: Note):

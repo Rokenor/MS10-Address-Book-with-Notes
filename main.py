@@ -1,5 +1,7 @@
 import src.address_book.validators as validators
 from src.address_book.classes import AddressBook
+from colorama import Fore, Back, Style, init
+init(autoreset=True)
 
 from src.address_book.handlers import (
     close,
@@ -46,7 +48,7 @@ def parse_input(user_input):
 commands = {
     "close": close,
     "exit": close,
-    "hello": lambda args, book: "How can I help you?",
+    "hello": lambda args, book: Fore.GREEN + "How can I help you?",
     "help": command_list,
     "add": add_contact,
     "add-address": add_address,
@@ -73,12 +75,14 @@ commands = {
 def main():
     """Main function."""
     book = load_data(default=AddressBook())
-    print("Welcome to the assistant bot!")
+    print(Fore.YELLOW + "*" * 37)
+    print(Fore.YELLOW + "*   Welcome to the assistant bot!   *")
+    print(Fore.YELLOW + "*" * 37)
     print(command_list())
 
     try:
         while True:
-            user_input = input("Enter a command: ")
+            user_input = input(Fore.YELLOW + "Enter a command:" + Style.RESET_ALL + Fore.BLUE + " ")
             command, *args = parse_input(user_input)
 
             if command in commands:
@@ -87,11 +91,11 @@ def main():
                     if result is not None:
                         print(result)
                 except Exception as e:
-                    print(f"Error: {e}")
+                    print(Fore.RED + f"Error: {e}")
             else:
-                print("Invalid command. Please try again.")
+                print(Fore.RED + "Invalid command. Please try again.")
     except KeyboardInterrupt:
-        print("\nCtrl+C detected. Exiting...")
+        print(Fore.GREEN + "\nCtrl+C detected. Exiting...")
     finally:
         save_data(book)
 
