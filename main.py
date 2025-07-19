@@ -106,8 +106,10 @@ def main():
                     print(Fore.RED + f"Error: {e}")
             else:
                 print(Fore.RED + "Invalid command. Please try again.")
-    except KeyboardInterrupt | EOFError:
-        cowsay.cow('Bye ʘ̥̥̥̥̥̥̥̥︵ʘ...')
+    except KeyboardInterrupt:
+        cowsay.cow('Bye (╥﹏╥)')
+    except EOFError:
+        cowsay.cow('Bye (╥﹏╥)')
     finally:
         save_data(book)
 
