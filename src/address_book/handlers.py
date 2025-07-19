@@ -2,12 +2,13 @@ import sys
 from . import validators
 from .classes import AddressBook, Record, Address, Email
 from prettytable.colortable import ColorTable, Themes
+import cowsay
 from colorama import Fore, init
 init(autoreset=True)
 
 def close(args = None, book = None):
     """Exit the program"""
-    print(Fore.GREEN + "Good bye!")
+    cowsay.cow("Bye (╥﹏╥)")
     sys.exit(0)
 
 def command_list(args = None, book = None):
@@ -33,7 +34,7 @@ def command_list(args = None, book = None):
         [f"{Fore.GREEN}edit-birthday {Fore.LIGHTGREEN_EX}<name> <new_birthday>", f"{Fore.WHITE}Edit a contact's birthday"],
         [f"{Fore.GREEN}birthdays {Fore.LIGHTGREEN_EX}<days>", f"{Fore.WHITE}List upcoming birthdays in the next <days> days"],
         [f"{Fore.GREEN}all", f"{Fore.WHITE}List all contacts"],
-        [f"{Fore.GREEN}search {Fore.LIGHTGREEN_EX}<name>", f"{Fore.WHITE}Find a contact by name"],
+        [f"{Fore.GREEN}search {Fore.LIGHTGREEN_EX}<keyword>", f"{Fore.WHITE}Find a contact by name, phone, email, address, or birthday"],
         [f"{Fore.GREEN}delete {Fore.LIGHTGREEN_EX}<name>", f"{Fore.WHITE}Delete a contact"]],
         divider=True
     )
@@ -98,14 +99,27 @@ def list_contacts(_, book: AddressBook):
 
 @validators.find_contact_validator
 def find_contact(args, book: AddressBook):
-    """Пошук контактів за ім’ям, телефоном, email, адресою або днем народження."""
+    """Search for contacts by name, phone, email, address, or birthday."""
     if not args:
-        return "Please provide a search keyword."
+        return Fore.RED + "Please provide a search keyword."
     keyword = args[0]
     results = book.search(keyword)
     if not results:
-        return f"No contacts found for '{keyword}'."
-    return "\n".join(str(r) for r in results)
+        return Fore.RED + f"No contacts found for '{keyword}'."
+    print('\n')
+    print(Fore.GREEN + "Search results:")
+    table = ColorTable(theme=Themes.OCEAN_DEEP)
+    table.align = "r"
+    table.field_names = [f"{Fore.YELLOW}Name", f"{Fore.YELLOW}Birthday", f"{Fore.YELLOW}Phones", f"{Fore.YELLOW}Address", f"{Fore.YELLOW}Email"]
+    for rec in results:
+        rec_name = rec.name
+        rec_birthday = rec.birthday
+        rec_phones = ', '.join(str(phone) for phone in rec.phones)
+        rec_address = rec.address.value if isinstance(rec.address, Address) else 'None'
+        rec_email = rec.email.value if isinstance(rec.email, Email) else 'None'
+
+        table.add_row([rec_name, rec_birthday, rec_phones, rec_address, rec_email])
+    return table
 
 
 @validators.delete_contact_validator
