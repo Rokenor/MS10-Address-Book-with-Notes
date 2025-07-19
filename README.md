@@ -6,17 +6,20 @@ A comprehensive command-line contact management system with integrated notes fun
 
 - Comprehensive contact management:
   - Add, edit, and delete contacts
-  - Store multiple phone numbers (displayed as comma-separated strings)
+  - Store multiple phone numbers with validation
   - Manage email addresses with validation
   - Track physical addresses with improved display
   - Birthday tracking and reminders
+  - Search contacts by name, phone, email, address, or birthday
+  - List all contacts with detailed information
 
 - Advanced notes system:
-  - Create and manage notes with dividers for better readability
+  - Create and manage notes with text formatting
   - Add tags for organization
   - Search notes by content or tags
   - Sort notes by tags
   - Edit and delete notes
+  - List all notes with tags
 
 - Enhanced UI:
   - Colorized output for better visibility
@@ -28,7 +31,7 @@ A comprehensive command-line contact management system with integrated notes fun
 
 - Persistent data storage:
   - Automatic data persistence using pickle
-  - Separate storage for contacts and notes
+  - Storage for contacts and notes
   - Data backup and recovery
 
 - User-friendly interface:
@@ -36,6 +39,7 @@ A comprehensive command-line contact management system with integrated notes fun
   - Input validation with colored error messages
   - Help system with command descriptions
   - Interactive prompts for better user experience
+  - Cow-themed exit message
 
 ## Python Version Requirements
 
@@ -84,6 +88,12 @@ python main.py
 Enter a command: add John 1234567890
 Contact added.
 
+Enter a command: add-email John john@example.com
+Email added.
+
+Enter a command: add-address John 123 Main St
+Address added.
+
 Enter a command: add-birthday John 15.03.1990
 Birthday added.
 
@@ -91,14 +101,11 @@ Enter a command: add-email John john@example.com
 Email added.
 
 # Notes Management
-Enter a command: note Important work meeting
+Enter a command: note Meeting with John
 Note created.
 
-Enter a command: note-search meeting
-Found notes: work meeting
-
-Enter a command: note-tag-sort
-Notes sorted by tags
+Enter a command: note-tag Meeting 1234567890
+Tag added to note.
 ```
 
 ## Troubleshooting
