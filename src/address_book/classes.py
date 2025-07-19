@@ -146,6 +146,11 @@ class AddressBook(UserDict):
         data (dict[str, Record]): A dictionary that stores the records in the address book.
     """
     data: dict[str, Record]
+    
+    def names(self):
+        """Returns names of all records in the address book."""
+        return list(self.data.keys())
+        
 
     def add_record(self, record: Record):
         """Adds a record to the address book."""
