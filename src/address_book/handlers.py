@@ -96,19 +96,15 @@ def list_contacts(_, book: AddressBook):
 
 @validators.find_contact_validator
 def find_contact(args, book: AddressBook):
-    """Finds a contact by name and returns a string representation of the contact."""
-    name = args[0]
-    rec = book.find(name)
+    """Пошук контактів за ім’ям, телефоном, email, адресою або днем народження."""
+    if not args:
+        return "Please provide a search keyword."
+    keyword = args[0]
+    results = book.search(keyword)
+    if not results:
+        return f"No contacts found for '{keyword}'."
+    return "\n".join(str(r) for r in results)
 
-    if rec is None:
-        return Fore.RED + "Contact not found."
-    print('\n')
-    print(Fore.GREEN + "Contact found:")
-    table = ColorTable(theme=Themes.OCEAN_DEEP)
-    table.align = "r"
-    table.field_names = [f"{Fore.YELLOW}Name", f"{Fore.YELLOW}Birthday", f"{Fore.YELLOW}Phones", f"{Fore.YELLOW}Address", f"{Fore.YELLOW}Email"]
-    table.add_row([rec.name, rec.birthday, ', '.join(str(phone) for phone in rec.phones), rec.address.value if isinstance(rec.address, Address) else 'None', rec.email.value if isinstance(rec.email, Email) else 'None'])
-    return table
 
 @validators.delete_contact_validator
 def delete_contact(args, book: AddressBook):

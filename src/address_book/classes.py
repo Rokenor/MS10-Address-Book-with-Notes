@@ -190,3 +190,27 @@ class AddressBook(UserDict):
                 if 0 <= birthday_diff <= upcoming_days:
                     upcoming_birthdays.append(record)
         return upcoming_birthdays
+
+    def search(self, keyword: str):
+        keyword = keyword.lower()
+        results = []
+
+        for record in self.data.values():
+            name = getattr(record.name, 'value', '')
+            phones = [getattr(phone, 'value', '') for phone in record.phones]
+            email = getattr(record.email, 'value', '') if record.email else ''
+            address = getattr(record.address, 'value', '') if record.address else ''
+            birthday = getattr(record.birthday, 'value', '') if record.birthday else ''
+
+            if (
+                keyword in name.lower()
+                or any(keyword in p.lower() for p in phones)
+                or keyword in email.lower()
+                or keyword in address.lower()
+                or keyword in birthday.lower()
+            ):
+                results.append(record)
+
+        return results
+
+
