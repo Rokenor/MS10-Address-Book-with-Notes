@@ -1,5 +1,6 @@
+import re
 from functools import wraps
-from .classes import AddressBook, Record
+from src.address_book.classes import AddressBook, Record
 from colorama import Fore, init
 init(autoreset=True)
 
@@ -18,9 +19,15 @@ def add_contact_validator(func):
     def wrapper(args, contacts):
         if len(args) != 2:
             return Fore.RED + "Invalid number of arguments. Usage: add <name> <phone>"
-        name, phone = args
+        name, *phone = args
+        phone = "".join(phone)
+
         if not name or not phone:
             return Fore.RED + "Name and phone cannot be empty."
+
+        if not _is_phone(phone):
+            return Fore.RED + "Invalid phone number."
+
         return func(args, contacts)
     return wrapper
 
@@ -81,7 +88,15 @@ def edit_phone_validator(func):
     def wrapper(args, contacts):
         if len(args) != 3:
             return Fore.RED + "Invalid number of arguments. Usage: edit-phone <name> <old_phone> <new_phone>"
+
+        _, old_phone, *new_phone = args
+        new_phone = "".join(new_phone)
+
+        if not _is_phone(new_phone):
+            return Fore.RED + "Invalid phone number."
+
         return func(args, contacts)
+
     return wrapper
 
 def add_birthday_validator(func):
@@ -124,6 +139,10 @@ def add_email_validator(func):
         name, email = args
         if not name or not email:
             return Fore.RED + "Name and email cannot be empty."
+
+        if not _is_email(email):
+            return Fore.RED + "Invalid email."
+
         return func(args, book)
     return wrapper
 
@@ -136,5 +155,16 @@ def edit_email_validator(func):
         name, new_email = args
         if not name or not new_email:
             return Fore.RED + "Name and new email cannot be empty."
+
+        if not _is_email(new_email):
+            return Fore.RED + "Invalid email."
+
         return func(args, book)
     return wrapper
+
+
+def _is_email(email):
+    return re.match(r"[^@ \"(),:;<>\[\\\]]+@[^@ \"(),:;<>\[\\\]]+\.[^@ \"(),:;<>\[\\\]]+", email)
+
+def _is_phone(new_phone):
+    return re.match(r"^\+?\(?[0-9]{3}\)?[-\s.]?[0-9]{2,3}[-\s.]?[0-9]{2,6}[-\s.]??[0-9]{2,6}$", new_phone)

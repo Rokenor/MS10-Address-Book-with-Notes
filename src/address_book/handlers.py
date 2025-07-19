@@ -53,7 +53,9 @@ def command_list(args = None, book = None):
 @validators.add_contact_validator
 def add_contact(args, book: AddressBook):
     """Adds a new contact to the address book."""
-    name, phone = args
+    name, *phone = args
+    phone = "".join(phone)
+
     record = book.find(name)
     message = Fore.GREEN + "Contact updated."
     if record is None:
@@ -131,7 +133,8 @@ def edit_address(args, book: AddressBook):
 @validators.edit_phone_validator
 def edit_phone(args, book: AddressBook):
     """Edits a contact's phone number in the address book."""
-    name, old_phone, new_phone = args
+    name, old_phone, *new_phone = args
+    new_phone = "".join(new_phone)
     rec = book.find(name)
     if rec is None:
         return Fore.RED + "Contact not found."
@@ -164,7 +167,7 @@ def edit_birthday(args, book: AddressBook):
 @validators.birthdays_validator
 def birthdays(args, book: AddressBook):
     """Returns a list of users who need to be greeted on the next week"""
-    upcoming_days = int(args[0])
+    upcoming_days = int(args[0]) if len(args) else 7
     birthdays_list = book.get_upcoming_birthdays(upcoming_days)
     if not birthdays_list:
         return Fore.RED + "No upcoming birthdays."

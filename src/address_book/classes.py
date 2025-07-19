@@ -23,10 +23,6 @@ class Address(Field):
 
 class Phone(Field):
     """Represents a phone number in the address book."""
-    def __init__(self, value: str):
-        if len(value) != 10 or not value.isdigit():
-            raise ValueError(Fore.RED + "Phone must be 10 digits long and contain only digits. Got: " + value)
-        super().__init__(value)
 
 class Email(Field):
     """Represents an email address in the address book."""
