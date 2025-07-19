@@ -1,6 +1,13 @@
+from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
 import src.address_book.validators as validators
 from src.address_book.classes import AddressBook
-from colorama import Fore, Back, Style, init
+from colorama import Fore, init
+from prompt_toolkit import PromptSession
+from prompt_toolkit.formatted_text import HTML
+import cowsay
+from src.autocompleter import MultiStageCompleter
+
+# reset cmd colors
 init(autoreset=True)
 
 from src.address_book.handlers import (
@@ -75,14 +82,19 @@ commands = {
 def main():
     """Main function."""
     book = load_data(default=AddressBook())
-    print(Fore.YELLOW + "*" * 37)
-    print(Fore.YELLOW + "*   Welcome to the assistant bot!   *")
-    print(Fore.YELLOW + "*" * 37)
+    cowsay.cow("  Welcome to the assistant bot!  ")
     print(command_list())
 
+    command_completer = MultiStageCompleter(commands.keys(), book)
+    session = PromptSession()
+    
     try:
         while True:
-            user_input = input(Fore.YELLOW + "Enter a command:" + Style.RESET_ALL + Fore.BLUE + " ")
+            user_input = session.prompt(HTML('<yellow>Enter a command: </yellow>'), completer=command_completer, auto_suggest=AutoSuggestFromHistory(), complete_while_typing=True)
+            
+            if not user_input.strip():
+                continue
+                
             command, *args = parse_input(user_input)
 
             if command in commands:
@@ -94,8 +106,8 @@ def main():
                     print(Fore.RED + f"Error: {e}")
             else:
                 print(Fore.RED + "Invalid command. Please try again.")
-    except KeyboardInterrupt:
-        print(Fore.GREEN + "\nCtrl+C detected. Exiting...")
+    except KeyboardInterrupt | EOFError:
+        cowsay.cow('Bye ʘ̥̥̥̥̥̥̥̥︵ʘ...')
     finally:
         save_data(book)
 
